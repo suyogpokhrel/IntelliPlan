@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}IntelliChat - IntelliPlan{% endblock %}
+
+{% block content %}
+<div class="intellichat-container">
+    <div class="content-header">
+        <h1>IntelliChat</h1>
+    </div>
+
+    <div class="chat-interface">
+        <div class="chat-messages" id="chatMessages">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="message {% if message.is_user %}user-message{% else %}bot-message{% endif %}">
+                    <div class="message-content">
+                        {{ message.content }}
+                    </div>
+                    <div class="message-time">
+                        {{ message.timestamp|time:"g:i A" }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="welcome-message">
+                    <h2>Welcome to IntelliChat! 👋</h2>
+                    <p>Your AI study assistant is here to help. Ask me anything about your studies!</p>
+                    <div class="suggested-prompts">
+                        <h3>Try asking:</h3>
+                        <button class="prompt-btn">"How do I solve quadratic equations?"</button>
+                        <button class="prompt-btn">"Explain the water cycle"</button>
+                        <button class="prompt-btn">"Help me create a study schedule"</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="chat-input">
+            <form id="chatForm">
+                {% csrf_token %}
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button type="submit">
+                    <span class="material-icons-round">send</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+
+    // Handle suggested prompts
+    document.querySelectorAll('.prompt-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            messageInput.value = this.textContent.replace(/['"]/g, '');
+            messageInput.focus();
+        });
+    });
+
+    // Handle form submission
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        // Add user message to chat
+        appendMessage(message, true);
+        messageInput.value = '';
+
+        // Send message to backend
+        fetch('/study-plan/send-message/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({ message })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            appendMessage(data.response, false);
+        })
+        .catch(error => {
+            console.error('Chat error:', error);
+            appendMessage('Sorry, I encountered an error. Please try again.', false);
+        });
+    });
+
+    function appendMessage(content, isUser) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = content;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+        
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(timeDiv);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %} 

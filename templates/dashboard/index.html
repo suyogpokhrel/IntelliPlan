@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - IntelliPlan{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="welcome-header">
+        <h1>Welcome back, {{ user.username }}!</h1>
+        <p class="date">{{ now|date:"F d, Y" }}</p>
+    </div>
+
+    <div class="dashboard-grid">
+        <!-- Study Plan Card -->
+        <div class="card study-plan-card">
+            <div class="card-header">
+                <span class="material-icons-round">menu_book</span>
+                <h2>My Study Plan</h2>
+            </div>
+            <div class="card-content">
+                {% if upcoming_tasks %}
+                    <p>You have {{ upcoming_tasks.count }} pending tasks in your study plan.</p>
+                {% else %}
+                    <p>No pending tasks. Add some tasks to your study plan!</p>
+                {% endif %}
+                <a href="{% url 'study_plan:study_plan' %}" class="btn-primary">
+                    Go to Study Plan
+                    <span class="material-icons-round">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- IntelliChat Card -->
+        <div class="card intellichat-card">
+            <div class="card-header">
+                <span class="material-icons-round">chat_bubble_outline</span>
+                <h2>IntelliChat</h2>
+            </div>
+            <div class="card-content">
+                <p>Need help with your studies? Ask IntelliChat:</p>
+                <div class="quick-prompts">
+                    <button class="prompt">"How do I solve quadratic equations?"</button>
+                    <button class="prompt">"Explain the water cycle"</button>
+                    <button class="prompt">"Help me create a study schedule"</button>
+                </div>
+                <a href="{% url 'intellichat:intellichat' %}" class="btn-primary">
+                    Go to IntelliChat
+                    <span class="material-icons-round">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Weekly Progress Card -->
+        <div class="card progress-card">
+            <div class="card-header">
+                <span class="material-icons-round">analytics</span>
+                <h2>Weekly Progress</h2>
+            </div>
+            <div class="card-content">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Tasks Completed</span>
+                        <span class="stat-value">{{ completed_tasks_count }}/{{ total_tasks_count }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">High Priority</span>
+                        <span class="stat-value">{{ high_priority_count }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Completion Rate</span>
+                        <span class="stat-value">{{ completion_rate }}%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Most Common Subject</span>
+                        <span class="stat-value">{{ most_common_subject|default:"None" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome to IntelliPlan{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to IntelliPlan</h1>
+    <p class="lead">Your intelligent study planning assistant</p>
+    
+    {% if user.is_authenticated %}
+        <div class="cta-buttons">
+            <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+            <a href="{% url 'study_plan:study_plan' %}" class="btn btn-secondary">View Study Plan</a>
+        </div>
+    {% else %}
+        <div class="cta-buttons">
+            <a href="{% url 'account_login' %}" class="btn btn-primary">Get Started</a>
+            <a href="#features" class="btn btn-secondary">Learn More</a>
+        </div>
+    {% endif %}
+</div>
+
+<section id="features" class="features">
+    <h2>Features</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3>Smart Dashboard</h3>
+            <p>Get a personalized overview of your study progress and upcoming tasks.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Study Planning</h3>
+            <p>Create and manage your study goals with our intuitive planning tools.</p>
+        </div>
+        <div class="feature-card">
+            <h3>AI Assistant</h3>
+            <p>Get instant help with concepts and study tips from our intelligent chat assistant.</p>
+        </div>
+    </div>
+</section>
+{% endblock %} 
