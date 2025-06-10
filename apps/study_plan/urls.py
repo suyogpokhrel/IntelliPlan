@@ -13,4 +13,8 @@ urlpatterns = [
     path('goals/<int:goal_id>/delete/', views.delete_goal, name='delete_goal'),
     path('generate-plan/', views.generate_ai_study_plan, name='generate_ai_study_plan'),
     path('send-message/', views.send_chat_message, name='send_chat_message'),
+    path('download-pdf/', views.download_study_plan_pdf, name='download_study_plan_pdf'),
+    path('plans/<int:plan_id>/', views.view_study_plan, name='view_study_plan'),
+    path('plans/<int:plan_id>/delete/', views.delete_study_plan, name='delete_study_plan'),
+    path('tasks/all/', views.view_tasks, name='view_tasks'),
 ] 

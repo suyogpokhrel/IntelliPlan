@@ -2,6 +2,7 @@ import os
 import google.generativeai as genai
 from django.conf import settings
 import traceback
+import re
 
 def initialize_gemini():
     """Initialize Gemini API and models."""
@@ -48,6 +49,7 @@ def generate_study_plan(subject, days, hours, level):
     prompts = {
         "beginner": f"You are a helpful study planner for {subject}. Create a beginner plan for {days} days at {hours} hrs/day.",
         "intermediate": f"You are a study planner. Create an intermediate study plan for {subject} over {days} days, {hours} hrs/day.",
+        "advanced": f"You are a study planner. Create an advanced study plan for {subject} over {days} days, focusing on deeper concepts and practical application. Plan for {hours} hrs/day.",
         "expert": f"You are a study planner. Create an expert revision plan for {subject} within {days} days, {hours} hrs/day."
     }
 
@@ -118,7 +120,70 @@ def get_chat_response(user_message, chat_history=None):
             return error_msg
             
         print(f"Successfully generated response: {response.text[:100]}...")
-        return response.text
+
+        # --- Enhanced formatting for chat responses ---
+        text = response.text
+        text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', text)
+        lines = text.split('\n')
+        formatted_lines = []
+        in_ul = False
+        in_ol = False
+        for line in lines:
+            stripped = line.strip()
+            # Headings: Markdown #, ##, or ALL CAPS
+            if re.match(r'^#{1,2} ', stripped):
+                if in_ul:
+                    formatted_lines.append('</ul>')
+                    in_ul = False
+                if in_ol:
+                    formatted_lines.append('</ol>')
+                    in_ol = False
+                level = 2 if stripped.startswith('##') else 3
+                heading = re.sub(r'^#{1,2} ', '', stripped)
+                formatted_lines.append(f'<h{level} style="margin:1em 0 0.5em 0;">{heading}</h{level}>')
+            elif re.match(r'^[A-Z0-9\s]{4,}:?$', stripped) and not re.match(r'^\d+\. ', stripped):
+                if in_ul:
+                    formatted_lines.append('</ul>')
+                    in_ul = False
+                if in_ol:
+                    formatted_lines.append('</ol>')
+                    in_ol = False
+                heading = stripped.rstrip(':')
+                formatted_lines.append(f'<h3 style="margin:1em 0 0.5em 0;">{heading.title()}</h3>')
+            # Unordered list
+            elif stripped.startswith('* ') or stripped.startswith('- '):
+                if in_ol:
+                    formatted_lines.append('</ol>')
+                    in_ol = False
+                if not in_ul:
+                    formatted_lines.append('<ul style="margin:0.5em 0 0.5em 1.5em;">')
+                    in_ul = True
+                formatted_lines.append(f'<li>{stripped[2:].strip()}</li>')
+            # Ordered list
+            elif re.match(r'^\d+\. ', stripped):
+                if in_ul:
+                    formatted_lines.append('</ul>')
+                    in_ul = False
+                if not in_ol:
+                    formatted_lines.append('<ol style="margin:0.5em 0 0.5em 1.5em;">')
+                    in_ol = True
+                formatted_lines.append(f'<li>{re.sub(r"^\d+\. ", "", stripped)}</li>')
+            # Paragraph
+            elif stripped:
+                if in_ul:
+                    formatted_lines.append('</ul>')
+                    in_ul = False
+                if in_ol:
+                    formatted_lines.append('</ol>')
+                    in_ol = False
+                formatted_lines.append(f'<p style="margin:0.5em 0;">{stripped}</p>')
+        if in_ul:
+            formatted_lines.append('</ul>')
+        if in_ol:
+            formatted_lines.append('</ol>')
+        formatted = '\n'.join(formatted_lines)
+        return formatted
+        # --- End enhanced formatting ---
             
     except Exception as e:
         error_msg = f"Error in chat response: {str(e)}"

@@ -3,38 +3,167 @@
 {% block title %}Welcome to IntelliPlan{% endblock %}
 
 {% block content %}
-<div class="hero">
-    <h1>Welcome to IntelliPlan</h1>
-    <p class="lead">Your intelligent study planning assistant</p>
+<style>
+body {
+    background: #f6f8fc;
+}
+.enhanced-hero {
+    background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 60%);
+    color: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 24px 0 rgba(99,102,241,0.10);
+    padding: 3rem 2rem 2.5rem 2rem;
+    margin: 2.5rem auto 2rem auto;
+    max-width: 700px;
+    text-align: center;
+    position: relative;
+}
+.hero-icon {
+    font-size: 3.5rem;
+    color: #fffde4;
+    margin-bottom: 0.5rem;
+    background: none;
+}
+.hero-title {
+    font-size: 2.7rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    color: #002dff;
+}
+.hero-lead {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: #e0e7ff;
+}
+.cta-buttons {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.08rem;
+    font-weight: 600;
+    border-radius: 2rem;
+    padding: 0.7rem 1.7rem;
+    box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+    border: none;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-primary {
+    background: #fff;
+    color: #6366f1;
+}
+.btn-primary:hover {
+    background: #e0e7ff;
+    color: #3730a3;
+    box-shadow: 0 4px 16px 0 rgba(99,102,241,0.18);
+}
+.btn-secondary {
+    background: #a5b4fc;
+    color: #fff;
+}
+.btn-secondary:hover {
+    background: #6366f1;
+    color: #fffde4;
+    box-shadow: 0 4px 16px 0 rgba(99,102,241,0.18);
+}
+
+.enhanced-features {
+    margin: 3rem auto 2rem auto;
+    max-width: 900px;
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 2px 16px 0 rgba(99,102,241,0.07);
+}
+.features-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    color: #3730a3;
+}
+.feature-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+.feature-card {
+    background: #f6f8fc;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 8px 0 rgba(99,102,241,0.07);
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    flex: 1 1 220px;
+    max-width: 270px;
+    min-width: 200px;
+    text-align: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.feature-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 24px 0 rgba(99,102,241,0.13);
+}
+.feature-icon {
+    font-size: 2.5rem;
+    color: #6366f1;
+    margin-bottom: 0.7rem;
+}
+@media (max-width: 700px) {
+    .enhanced-hero, .enhanced-features {
+        padding: 1.2rem 0.5rem;
+        margin: 1.2rem 0.2rem;
+    }
+    .feature-grid {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+}
+</style>
+
+<div class="hero enhanced-hero">
+    <span class="material-icons-round hero-icon">emoji_objects</span>
+    <h1 class="hero-title">Welcome to IntelliPlan</h1>
+    <p class="lead hero-lead">Your intelligent study planning assistant</p>
     
     {% if user.is_authenticated %}
         <div class="cta-buttons">
-            <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
-            <a href="{% url 'study_plan:study_plan' %}" class="btn btn-secondary">View Study Plan</a>
+            <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary"><span class="material-icons-round">dashboard</span> Go to Dashboard</a>
+            <a href="{% url 'study_plan:study_plan' %}" class="btn btn-secondary"><span class="material-icons-round">menu_book</span> View Study Plan</a>
         </div>
     {% else %}
         <div class="cta-buttons">
-            <a href="{% url 'account_login' %}" class="btn btn-primary">Get Started</a>
-            <a href="#features" class="btn btn-secondary">Learn More</a>
+            <a href="{% url 'account_login' %}" class="btn btn-primary"><span class="material-icons-round">login</span> Get Started</a>
+            <a href="#features" class="btn btn-secondary"><span class="material-icons-round">info</span> Learn More</a>
         </div>
     {% endif %}
 </div>
 
-<section id="features" class="features">
-    <h2>Features</h2>
+<section id="features" class="features enhanced-features">
+    <h2 class="features-title">Features</h2>
     <div class="feature-grid">
         <div class="feature-card">
+            <span class="material-icons-round feature-icon">grid_view</span>
             <h3>Smart Dashboard</h3>
             <p>Get a personalized overview of your study progress and upcoming tasks.</p>
         </div>
         <div class="feature-card">
+            <span class="material-icons-round feature-icon">check_circle</span>
             <h3>Study Planning</h3>
             <p>Create and manage your study goals with our intuitive planning tools.</p>
         </div>
         <div class="feature-card">
+            <span class="material-icons-round feature-icon">smart_toy</span>
             <h3>AI Assistant</h3>
             <p>Get instant help with concepts and study tips from our intelligent chat assistant.</p>
         </div>
     </div>
 </section>
-{% endblock %} 
+{% endblock %}

@@ -1,0 +1,4 @@
+{% load plan_format %}
+<div class="plan-preview" style="margin-top:1em;max-height:7em;overflow:auto;font-size:0.98em;color:#374151;">
+    {{ plan.plan_text|format_study_plan|safe }}
+</div> 

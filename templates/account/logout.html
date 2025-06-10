@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Sign Out - IntelliPlan{% endblock %}
+{% block content %}
+<div class="auth-bg-gradient">
+  <div class="auth-container">
+    <div class="auth-card">
+      <a href="/" class="auth-logo" style="text-decoration:none;"><span class="material-icons-round">school</span></a>
+      <h2 class="auth-title">Sign Out</h2>
+      <p class="auth-message">Are you sure you want to log out?</p>
+      <form method="post" action="{% url 'account_logout' %}" class="auth-form" style="gap: 1rem;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary btn-block">Logout</button>
+        <a href="/" class="btn btn-secondary btn-block" style="text-align:center;display:block;text-decoration:none;">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+.auth-bg-gradient {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6366f1 0%, #a5b4fc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-container {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.auth-card {
+  background: #fff;
+  padding: 2.75rem 2.25rem 2.25rem 2.25rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 36px 0 rgba(99,102,241,0.18);
+  max-width: 410px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  transition: box-shadow 0.2s;
+}
+.auth-card:hover {
+  box-shadow: 0 16px 48px 0 rgba(99,102,241,0.22);
+}
+.auth-logo {
+  font-size: 2.8rem;
+  color: #6366f1;
+  margin-bottom: 0.7rem;
+  display: inline-block;
+  transition: transform 0.15s;
+}
+.auth-logo:hover {
+  transform: scale(1.1) rotate(-6deg);
+}
+.auth-title {
+  text-align: center;
+  margin-bottom: 1.7rem;
+  color: #4338ca;
+  font-weight: 700;
+  font-size: 2.1rem;
+  letter-spacing: -1px;
+}
+.auth-message {
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+.btn.btn-primary {
+  background: linear-gradient(90deg, #6366f1 0%, #4338ca 100%);
+  color: #fff;
+  border: none;
+  justify-content: center;
+  padding: 0.85rem 1.6rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.10);
+}
+.btn.btn-primary:hover {
+  background: linear-gradient(90deg, #4338ca 0%, #6366f1 100%);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px 0 rgba(99,102,241,0.16);
+}
+.btn.btn-secondary {
+  background: #e5e7eb;
+  color: #4338ca;
+  border: none;
+  padding: 0.85rem 1.6rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px 0 rgba(99,102,241,0.06);
+  text-align: center;
+  display: block;
+  text-decoration: none;
+}
+.btn.btn-secondary:hover {
+  background: #d1d5db;
+  color: #6366f1;
+  box-shadow: 0 4px 16px 0 rgba(99,102,241,0.10);
+}
+@media (max-width: 600px) {
+  .auth-card { padding: 1.5rem 0.5rem; }
+}
+</style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+{% endblock %}

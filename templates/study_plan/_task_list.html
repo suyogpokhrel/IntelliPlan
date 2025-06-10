@@ -1,0 +1,27 @@
+{% for task in tasks %}
+<div class="task-item" id="task-{{ task.id }}">
+    <div style="flex:1;">
+        <h4 style="margin:0 0 0.5em 0;">{{ task.title }}</h4>
+        {# <div style="color:#6B7280;font-size:0.98em;">{{ task.description }}</div> #}
+        <div style="margin-top:0.5em;font-size:0.95em;">
+            <span style="color:#4F46E5;">Priority: {{ task.priority|title }}</span> |
+            <span style="color:#10B981;">Status: {{ task.status|title }}</span>
+            {% if task.due_date %}| <span style="color:#F59E0B;">Due: {{ task.due_date }}</span>{% endif %}
+        </div>
+    </div>
+    <button class="btn-icon delete-task-btn" title="Delete Task" data-task-id="{{ task.id }}" style="color:#ef4444;font-size:1.5em;background:none;border:none;cursor:pointer;">
+        <span class="material-icons-round">delete</span>
+    </button>
+</div>
+{% endfor %}
+{% if not tasks %}
+<div class="empty-state" id="task-list-container">
+    <img src="/static/images/empty-tasks.svg" alt="No tasks">
+    <h3>No tasks found</h3>
+    <p>Start by adding a new study task</p>
+    <a href="{% url 'study_plan:study_plan' %}" class="btn-primary" style="text-decoration:none;">
+        <span class="material-icons-round">add</span>
+        Add First Task
+    </a>
+</div>
+{% endif %} 

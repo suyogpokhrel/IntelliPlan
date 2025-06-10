@@ -1,20 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}IntelliPlan{% endblock %}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body {% if request.resolver_match.namespace %}class="{{ request.resolver_match.namespace }}-page"{% endif %}>
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="app-logo">
-                <span class="material-icons-round">school</span>
-                <h1>IntelliPlan</h1>
+                <a href="/" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;color:inherit;">
+                    <span class="material-icons-round">school</span>
+                    <h1 style="margin:0;">IntelliPlan</h1>
+                </a>
             </div>
             
             <nav class="sidebar-nav">
@@ -29,6 +33,10 @@
                 <a href="{% url 'intellichat:intellichat' %}" class="nav-item {% if request.resolver_match.namespace == 'intellichat' %}active{% endif %}">
                     <span class="material-icons-round">chat_bubble_outline</span>
                     <span>IntelliChat</span>
+                </a>
+                <a href="{% url 'aboutus:aboutus' %}" class="nav-item {% if request.resolver_match.namespace == 'aboutus' %}active{% endif %}">
+                    <span class="material-icons-round">info</span>
+                    <span>About Us</span>
                 </a>
             </nav>
 

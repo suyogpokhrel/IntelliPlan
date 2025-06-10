@@ -1,0 +1,27 @@
+<!-- Weekly Progress Card -->
+<div class="card progress-card">
+    <div class="card-header">
+        <span class="material-icons-round">analytics</span>
+        <h2>Weekly Progress</h2>
+    </div>
+    <div class="card-content">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Tasks Completed</span>
+                <span class="stat-value">{{ completed_tasks_count }}/{{ total_tasks_count }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">High Priority</span>
+                <span class="stat-value">{{ high_priority_count }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Completion Rate</span>
+                <span class="stat-value">{{ completion_rate }}%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Most Common Subject</span>
+                <span class="stat-value">{{ most_common_subject|default:"None" }}</span>
+            </div>
+        </div>
+    </div>
+</div> 

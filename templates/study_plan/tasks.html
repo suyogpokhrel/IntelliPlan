@@ -1,0 +1,431 @@
+{% extends 'base.html' %}
+
+{% block title %}Tasks - IntelliPlan{% endblock %}
+
+{% block extra_css %}
+<style>
+.tasks-section {
+    background-color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-md);
+    max-width: 700px;
+    margin: 2rem auto;
+}
+.tasks-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: #F9FAFB;
+    border-radius: 0.5rem;
+    border: 1px solid #E5E7EB;
+}
+.search-box input {
+    border: none;
+    background: none;
+    width: 100%;
+    font-size: 1rem;
+    color: #111827;
+}
+.search-box input:focus {
+    outline: none;
+}
+.filter-group {
+    display: flex;
+    gap: 1rem;
+}
+.filter-select {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.filter-select label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4B5563;
+}
+.filter-select select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 0.5rem;
+    background-color: white;
+    font-size: 1rem;
+    color: #111827;
+}
+.empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 3rem;
+    text-align: center;
+}
+.empty-state img {
+    width: 200px;
+    height: auto;
+    opacity: 0.7;
+}
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+.empty-state p {
+    color: #4B5563;
+    margin: 0;
+}
+.tasks-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.task-item {
+    background-color: #F9FAFB;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    transition: all 0.2s ease;
+    justify-content: space-between;
+}
+.task-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<form style="display:none;">{% csrf_token %}</form>
+<div class="tasks-section">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div class="section-header" style="margin-bottom: 0;">
+            <h2>Tasks</h2>
+        </div>
+        <div>
+            <a href="{% url 'study_plan:study_plan' %}" class="btn btn-secondary" style="text-decoration:none;">&larr; Back to My Study Plans</a>
+        </div>
+    </div>
+    {% if tasks %}
+    <div class="tasks-list" id="task-list-container">
+        {% for task in tasks %}
+        <div class="task-item" id="task-{{ task.id }}">
+            <div style="flex:1;">
+                <h4 style="margin:0 0 0.5em 0;">{{ task.title }}</h4>
+                {# <div style="color:#6B7280;font-size:0.98em;">{{ task.description }}</div> #}
+                <div style="margin-top:0.5em;font-size:0.95em;">
+                    <span style="color:#4F46E5;">Priority: {{ task.priority|title }}</span> |
+                    <span style="color:#10B981;">Status: {{ task.status|title }}</span>
+                    {% if task.due_date %}| <span style="color:#F59E0B;">Due: {{ task.due_date }}</span>{% endif %}
+                </div>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+                <select class="priority-select" data-task-id="{{ task.id }}" style="padding:0.25rem;border-radius:0.25rem;border:1px solid #E5E7EB;">
+                    <option value="high" {% if task.priority == 'high' %}selected{% endif %}>High</option>
+                    <option value="medium" {% if task.priority == 'medium' %}selected{% endif %}>Medium</option>
+                    <option value="low" {% if task.priority == 'low' %}selected{% endif %}>Low</option>
+                </select>
+                <select class="status-select" data-task-id="{{ task.id }}" style="padding:0.25rem;border-radius:0.25rem;border:1px solid #E5E7EB;">
+                    <option value="not_started" {% if task.status == 'not_started' %}selected{% endif %}>Not Started</option>
+                    <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="completed" {% if task.status == 'completed' %}selected{% endif %}>Completed</option>
+                </select>
+                <button class="btn-icon delete-task-btn" title="Delete Task" data-task-id="{{ task.id }}" style="color:#ef4444;font-size:1.5em;background:none;border:none;cursor:pointer;">
+                    <span class="material-icons-round">delete</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state" id="task-list-container">
+        <img src="/static/images/empty-tasks.svg" alt="No tasks">
+        <h3>No tasks found</h3>
+        <p>Start by adding a new study task</p>
+        <a href="{% url 'study_plan:study_plan' %}" class="btn-primary" style="text-decoration:none;">
+            <span class="material-icons-round">add</span>
+            Add First Task
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Wrap the task list container
+    const taskListContainer = document.getElementById('task-list-container');
+
+    // Handle status and priority updates
+    document.addEventListener('change', function(event) {
+        if (event.target.classList.contains('status-select')) {
+            const taskId = event.target.dataset.taskId;
+            const newStatus = event.target.value;
+            updateTaskStatus(taskId, newStatus);
+        } else if (event.target.classList.contains('priority-select')) {
+            const taskId = event.target.dataset.taskId;
+            const newPriority = event.target.value;
+            updateTaskPriority(taskId, newPriority);
+        }
+    });
+
+    function updateTaskStatus(taskId, newStatus) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        fetch(`/study-plan/tasks/${taskId}/update/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                status: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update the task item in the UI
+            const taskItem = document.getElementById(`task-${taskId}`);
+            const statusSpan = taskItem.querySelector('span[style*="color:#10B981"]');
+            statusSpan.textContent = `Status: ${newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('_', ' ')}`;
+            
+            // Refresh the dashboard statistics
+            refreshDashboardStats();
+        })
+        .catch(error => {
+            console.error('Error updating task status:', error);
+            alert('Failed to update task status. Please try again.');
+        });
+    }
+
+    function updateTaskPriority(taskId, newPriority) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        fetch(`/study-plan/tasks/${taskId}/update/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                priority: newPriority
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Update the task item in the UI
+            const taskItem = document.getElementById(`task-${taskId}`);
+            const prioritySpan = taskItem.querySelector('span[style*="color:#4F46E5"]');
+            prioritySpan.textContent = `Priority: ${newPriority.charAt(0).toUpperCase() + newPriority.slice(1)}`;
+            
+            // Refresh the dashboard statistics
+            refreshDashboardStats();
+        })
+        .catch(error => {
+            console.error('Error updating task priority:', error);
+            alert('Failed to update task priority. Please try again.');
+        });
+    }
+
+    function refreshDashboardStats() {
+        // Fetch the latest dashboard statistics
+        fetch('/dashboard/', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Update the weekly progress section
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newProgressSection = doc.querySelector('.progress-card');
+            const currentProgressSection = document.querySelector('.progress-card');
+            if (newProgressSection && currentProgressSection) {
+                currentProgressSection.innerHTML = newProgressSection.innerHTML;
+            }
+        })
+        .catch(error => {
+            console.error('Error refreshing dashboard stats:', error);
+        });
+    }
+
+    // Attach event listeners to filters
+    document.addEventListener('change', function(event) {
+        const target = event.target;
+        
+        if (target.matches('.tasks-filters select:nth-of-type(1)') || target.matches('.tasks-filters select:nth-of-type(2)')) {
+            applyFilters();
+        }
+    });
+
+    function applyFilters() {
+        // Re-select filters inside the function to ensure we have current references
+        const statusFilter = document.querySelector('.tasks-filters select:nth-of-type(1)');
+        const priorityFilter = document.querySelector('.tasks-filters select:nth-of-type(2)');
+
+        // Ensure filters exist before proceeding
+        if (!statusFilter || !priorityFilter) {
+            console.error('Filter selects not found.');
+            return; // Stop if elements are not found
+        }
+
+        const selectedStatusDisplay = statusFilter.value;
+        const selectedPriorityDisplay = priorityFilter.value;
+
+        console.log('Applying filters...');
+        console.log('Selected Status Display:', selectedStatusDisplay);
+        console.log('Selected Priority Display:', selectedPriorityDisplay);
+
+        let selectedStatus = '';
+        if (selectedStatusDisplay === 'Completed') {
+            selectedStatus = 'completed';
+        } else if (selectedStatusDisplay === 'In Progress') {
+            selectedStatus = 'in_progress';
+        } else if (selectedStatusDisplay === 'Not Started') {
+            selectedStatus = 'not_started';
+        }
+
+        let selectedPriority = '';
+        if (selectedPriorityDisplay === 'High') {
+            selectedPriority = 'high';
+        } else if (selectedPriorityDisplay === 'Medium') {
+            selectedPriority = 'medium';
+        } else if (selectedPriorityDisplay === 'Low') {
+            selectedPriority = 'low';
+        }
+
+        console.log('Selected Status Internal:', selectedStatus);
+        console.log('Selected Priority Internal:', selectedPriority);
+
+        // Construct the URL with query parameters
+        const url = new URL(window.location.href.split('?')[0]); // Start with base URL
+        if (selectedStatus) { // Add status filter only if a specific status is selected
+            url.searchParams.set('status', selectedStatus);
+        }
+        if (selectedPriority) { // Add priority filter only if a specific priority is selected
+            url.searchParams.set('priority', selectedPriority);
+        }
+
+        console.log('Fetching URL:', url.toString());
+
+        // Fetch filtered tasks
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Indicate AJAX request
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            console.log('Received HTML response:', html); // Log the received HTML
+
+            // Replace the current task list with the new filtered list
+            // Need to parse the incoming HTML to get the content of #task-list-container
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTaskList = doc.getElementById('task-list-container');
+            
+            if (newTaskList && taskListContainer) {
+                 taskListContainer.innerHTML = newTaskList.innerHTML;
+                 // Re-attach delete button listeners for the new tasks
+                 attachDeleteButtonListeners();
+            } else if (taskListContainer) {
+                 // Handle case where no tasks are found (empty state)
+                 // The empty state div also has the ID task-list-container
+                 // so we should just replace the innerHTML
+                 // It's safer to re-select taskListContainer here in case its reference was lost
+                 const currentTaskListContainer = document.getElementById('task-list-container');
+                 if (currentTaskListContainer) {
+                     currentTaskListContainer.innerHTML = doc.getElementById('task-list-container').innerHTML; // Assuming empty state also has the ID
+                     attachDeleteButtonListeners(); // Should be no buttons, but safe to call
+                 }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching tasks:', error);
+            // Optionally show an error message to the user
+        });
+    }
+
+    // Re-attach delete listeners after list update
+    function attachDeleteButtonListeners() {
+         document.querySelectorAll('.delete-task-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const taskId = this.getAttribute('data-task-id');
+                if (!confirm('Are you sure you want to delete this task?')) return;
+                fetch(`/study-plan/tasks/${taskId}/delete/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]') || {}).value || ''
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const taskElem = document.getElementById('task-' + taskId);
+                        if (taskElem) taskElem.remove();
+                         // Optionally call applyFilters() to re-render list if needed
+                         // applyFilters(); // Keep this commented out for now
+                    } else {
+                        alert('Failed to delete the task.');
+                    }
+                })
+                .catch(() => {
+                    alert('Error deleting the task.');
+                });
+            });
+        });
+    }
+    
+    // Initial attachment of delete listeners on page load
+    attachDeleteButtonListeners();
+
+    // Initial application of filters based on current URL parameters
+    // This ensures filters are applied if the page is loaded with parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialStatus = urlParams.get('status');
+    const initialPriority = urlParams.get('priority');
+
+    if (initialStatus || initialPriority) {
+        // Need to set the select values first if they exist in the URL
+        const statusFilter = document.querySelector('.tasks-filters select:nth-of-type(1)');
+        const priorityFilter = document.querySelector('.tasks-filters select:nth-of-type(2)');
+        
+        if (statusFilter && initialStatus) {
+            // Find the option with the matching internal value and set the select's value
+            const statusOption = statusFilter.querySelector(`option[value="${initialStatus}"]`);
+            if (statusOption) {
+                statusFilter.value = statusOption.text; // Set display value to match option text
+            }
+        }
+        if (priorityFilter && initialPriority) {
+             // Find the option with the matching internal value and set the select's value
+            const priorityOption = priorityFilter.querySelector(`option[value="${initialPriority}"]`);
+             if (priorityOption) {
+                 priorityFilter.value = priorityOption.text; // Set display value to match option text
+             }
+        }
+
+        applyFilters(); // Apply filters based on URL parameters
+    }
+
+</script>
+{% endblock %} 

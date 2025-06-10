@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.dashboard.apps.DashboardConfig',
     'apps.study_plan.apps.StudyPlanConfig',
     'apps.intellichat.apps.IntelliChatConfig',
+    'aboutus',
 ]
 
 MIDDLEWARE = [

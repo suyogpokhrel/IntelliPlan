@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - IntelliPlan{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'aboutus/css/styles.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="glowing-text">IntelliPlan</h1>
+            <p class="hero-subtitle">Revolutionizing education through AI-powered adaptive learning</p>
+            <div class="hero-cta">
+                <a href="#introduction" class="cta-button">Learn More</a>
+                <!-- <a href="#final-product" class="cta-button outline">View Demo</a> -->
+            </div>
+        </div>
+        <div class="hero-graphics">
+            <div class="floating-elements">
+                <div class="float-item">AI</div>
+                <div class="float-item">ML</div>
+                <div class="float-item">Data</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Introduction -->
+    <section id="introduction" class="section">
+        <div class="section-title-wrapper">
+            <h2 class="section-title" data-text="Introduction">Introduction</h2>
+            <p class="section-subtitle">Discover how AI is revolutionizing the way we learn and adapt to individual needs.</p>
+        </div>
+        <div class="project-info">
+            <div class="info-card project-description">
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4>Smart Learning Analysis</h4>
+                        <p>Advanced AI algorithms to understand your unique learning patterns and preferences</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4>Real-time Progress Tracking</h4>
+                        <p>Comprehensive analytics and insights to monitor your academic growth</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h4>Adaptive Study Planning</h4>
+                        <p>Dynamic schedules that evolve with your learning progress and goals</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Design -->
+    <section id="design" class="section">
+        <div class="section-title-wrapper">
+            <h2 class="section-title" data-text="Design">Design</h2>
+            <p class="section-subtitle">Explore our intuitive and user-centered design approach for optimal learning experience.</p>
+        </div>
+        <div class="design-grid">
+            <div class="info-card solution">
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4>Smart Time Management</h4>
+                        <p>AI-optimized scheduling that adapts to your peak productivity hours</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h4>Personalized Learning</h4>
+                        <p>Customized study approaches based on your learning style and pace</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h4>Gap Analysis</h4>
+                        <p>Intelligent identification and targeting of knowledge gaps</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Market Impact -->
+    <section id="pledge" class="section">
+        <div class="section-title-wrapper">
+            <h2 class="section-title" data-text="Market Impact">Market Impact</h2>
+            <p class="section-subtitle">See how we're transforming the educational landscape with innovative AI solutions.</p>
+        </div>
+        <div class="info-card solution">
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h4>AI-Driven Innovation</h4>
+                    <p>Leading the EdTech revolution with advanced machine learning algorithms</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4>Data-Driven Insights</h4>
+                    <p>Comprehensive analytics for enhanced learning outcomes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h4>Seamless Integration</h4>
+                    <p>Compatible with existing educational platforms and tools</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Our Solutions -->
+    <section id="solutions" class="section solution-section">
+        <div class="section-title-wrapper">
+            <h2 class="section-title" data-text="Our Solutions">Our Solutions</h2>
+            <p class="section-subtitle">Cutting-edge AI-powered tools designed to enhance your learning journey.</p>
+        </div>
+        <div class="container">
+            <div class="solution-grid">
+                <!-- AI-Powered Learning -->
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="solution-title">AI-Powered Learning</h3>
+                    <p class="solution-description">
+                        Leverage advanced AI algorithms to create personalized study plans that adapt to your learning style and progress.
+                    </p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check-circle"></i> Smart Content Analysis</li>
+                        <li><i class="fas fa-check-circle"></i> Learning Pattern Recognition</li>
+                        <li><i class="fas fa-check-circle"></i> Adaptive Difficulty Scaling</li>
+                    </ul>
+                    <a href="#" class="solution-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Personalized Study Plans -->
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="solution-title">Personalized Plans</h3>
+                    <p class="solution-description">
+                        Get customized study schedules that fit your goals, availability, and learning preferences.
+                    </p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check-circle"></i> Custom Time Management</li>
+                        <li><i class="fas fa-check-circle"></i> Goal-based Planning</li>
+                        <li><i class="fas fa-check-circle"></i> Progress Tracking</li>
+                    </ul>
+                    <a href="#" class="solution-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Real-time Analytics -->
+                <div class="solution-card">
+                    <div class="solution-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="solution-title">Real-time Analytics</h3>
+                    <p class="solution-description">
+                        Monitor your progress with detailed analytics and get insights to improve your study efficiency.
+                    </p>
+                    <ul class="solution-features">
+                        <li><i class="fas fa-check-circle"></i> Performance Metrics</li>
+                        <li><i class="fas fa-check-circle"></i> Learning Insights</li>
+                        <li><i class="fas fa-check-circle"></i> Progress Reports</li>
+                    </ul>
+                    <a href="#" class="solution-link">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Final Product -->
+    <section id="final-product" class="section">
+        <div class="section-title-wrapper">
+            <h2 class="section-title" data-text="Final Product">Final Product</h2>
+            <p class="section-subtitle">Experience the future of personalized learning with our comprehensive platform.</p>
+        </div>
+        <div class="info-card solution">
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h4>Smart Dashboard</h4>
+                    <p>Intuitive interface for tracking progress and managing study plans</p>
+                    <!-- <a href="#" class="feature-link">
+                        <i class="fas fa-arrow-right"></i>
+                        Learn More
+                    </a> -->
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h4>Study Planner</h4>
+                    <p>AI-powered schedule optimization for maximum efficiency</p>
+                    <!-- <a href="#" class="feature-link">
+                        <i class="fas fa-arrow-right"></i>
+                        Learn More
+                    </a> -->
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>Analytics Hub</h4>
+                    <p>Comprehensive insights into your learning journey</p>
+                    <!-- <a href="#" class="feature-link">
+                        <i class="fas fa-arrow-right"></i>
+                        Learn More
+                    </a> -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Team -->
+    <section id="team" class="section">
+        <div class="section-title-wrapper">
+            <h2 class="section-title" data-text="Our Team">Our Team</h2>
+            <p class="section-subtitle">Meet the passionate experts behind IntelliPlan's innovative solutions.</p>
+        </div>
+        <div class="info-card solution">
+            <div class="features">
+                <div class="team-member-card">
+                    <div class="team-member-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="team-member-info">
+                        <h4>Jeevan Khatri</h4>
+                        <div class="team-member-role"> Team Leader & ML Engineer</div>
+                        <p>Specializing in adaptive learning algorithms and AI-driven educational solutions</p>
+                        <div class="team-member-social">
+                            <a href="https://www.linkedin.com/in/jeevan-khatri/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                                Connect on LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member-card">
+                    <div class="team-member-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="team-member-info">
+                        <h4>Suyog Kumar Pokhrel</h4>
+                        <div class="team-member-role">Backend Developer</div>
+                        <p>Expert in scalable education platforms and cloud infrastructure</p>
+                        <div class="team-member-social">
+                            <a href="https://www.linkedin.com/in/suyog-pokhrel/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                                Connect on LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member-card">
+                    <div class="team-member-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="team-member-info">
+                        <h4>Nirbhik Shrestha</h4>
+                        <div class="team-member-role">Backend Developer</div>
+                        <p>Specialized in database architecture and system optimization</p>
+                        <div class="team-member-social">
+                            <a href="https://www.linkedin.com/in/nirbhik-shrestha-382125343/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                                Connect on LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-member-card">
+                    <div class="team-member-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="team-member-info">
+                        <h4>Nischal Shrestha</h4>
+                        <div class="team-member-role">Frontend & UI/UX Designer</div>
+                        <p>Creating intuitive and engaging user experiences with modern design principles</p>
+                        <div class="team-member-social">
+                            <a href="https://www.linkedin.com/in/nischal-shrestha-0445a2358/" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                                Connect on LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'aboutus/js/script.js' %}"></script>
+{% endblock %}

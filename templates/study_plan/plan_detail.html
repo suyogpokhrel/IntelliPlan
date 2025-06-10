@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% load plan_format %}
+{% block title %}Study Plan: {{ plan.subject }} - IntelliPlan{% endblock %}
+{% block content %}
+<div class="auth-bg-gradient" style="min-height:100vh;padding:2em 0;">
+  <div class="auth-container" style="align-items:flex-start;justify-content:center;">
+    <div class="auth-card" style="max-width:700px;width:100%;margin:2em auto;">
+      <a href="/" class="auth-logo" style="text-decoration:none;"><span class="material-icons-round">school</span></a>
+      <h2 class="auth-title" style="margin-bottom:0.5em;">{{ plan.subject }} <span style="color:#6b7280;font-size:1rem;">({{ plan.level|title }})</span></h2>
+      <div style="color:#4b5563;font-size:1.05em;margin-bottom:0.5em;">Days: <b>{{ plan.days }}</b> &nbsp;|&nbsp; Hours/day: <b>{{ plan.hours }}</b></div>
+      {% if plan.notes %}<div style="color:#6b7280;font-size:0.98em;margin-bottom:0.7em;">Notes: {{ plan.notes }}</div>{% endif %}
+      <div style="color:#a5b4fc;font-size:0.95em;margin-bottom:1.2em;">Created: {{ plan.created_at|date:"M d, Y H:i" }}</div>
+      
+      <div class="generated-plan" style="margin-top: 0;">
+          <div class="plan-header">
+              <h3>Generated Study Plan</h3>
+          </div>
+          <div class="plan-content">
+            {{ plan.plan_text|format_study_plan|safe }}
+          </div>
+      </div>
+
+      <div class="plan-actions">
+          <button class="btn-primary download-pdf">
+              <span class="material-icons-round">download</span>
+              Download PDF
+          </button>
+          <button class="btn-secondary create-tasks">
+              <span class="material-icons-round">add_task</span>
+              Create Tasks
+          </button>
+      </div>
+
+      <a href="{% url 'study_plan:study_plan' %}" class="btn btn-secondary" style="text-align:center;display:inline-block;text-decoration:none;">&larr; Back to My Study Plans</a>
+    </div>
+  </div>
+</div>
+
+<!-- Add Task Modal (hidden by default) -->
+<div id="taskModal" class="modal" style="display:none;position:fixed;z-index:1000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:1rem;max-width:400px;width:100%;padding:2rem;box-shadow:0 4px 24px rgba(0,0,0,0.15);position:relative;">
+        <button onclick="closeTaskModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer;">&times;</button>
+        <h2 style="margin-bottom:1.5rem;">Add Task</h2>
+        <form id="taskForm">
+            {% csrf_token %}
+            <input type="hidden" id="taskId" name="taskId">
+            <div class="form-group">
+                <label for="taskTitle">Title</label>
+                <input type="text" id="taskTitle" name="title" required style="width:100%;padding:0.5rem;margin-bottom:1rem;">
+            </div>
+            <div class="form-group">
+                <label for="taskDescription">Description</label>
+                <textarea id="taskDescription" name="description" rows="3" style="width:100%;padding:0.5rem;margin-bottom:1rem;"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="taskPriority">Priority</label>
+                <select id="taskPriority" name="priority" style="width:100%;padding:0.5rem;margin-bottom:1rem;">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="taskStatus">Status</label>
+                <select id="taskStatus" name="status" style="width:100%;padding:0.5rem;margin-bottom:1rem;">
+                    <option value="Not Started">Not Started</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="taskDueDate">Due Date</label>
+                <input type="date" id="taskDueDate" name="due_date" style="width:100%;padding:0.5rem;margin-bottom:1.5rem;">
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;">Save Task</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block extra_css %}
+<style>
+:root {
+    --primary-color: #4F46E5; /* Define primary color */
+    --primary-hover: #4338CA; /* Define primary hover color */
+    --secondary-color: #6B7280; /* Define secondary color */
+    --text-secondary: #4B5563; /* Define text secondary color */
+    --background-light: #F9FAFB; /* Define background light color */
+    --border-color: #E5E7EB; /* Define border color */
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Define shadow */
+    --text-primary: #111827; /* Define text primary color */
+}
+
+.auth-bg-gradient {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #6366f1 0%, #a5b4fc 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2em 0; /* Only vertical padding */
+}
+.auth-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.auth-card {
+  background: #fff;
+  padding: 2.5rem 2rem 2rem 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(99,102,241,0.15);
+  max-width: 700px;
+  width: 100%;
+  margin: 2em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.auth-logo {
+  font-size: 2.5rem;
+  color: #6366f1;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  transition: transform 0.15s;
+}
+.auth-logo:hover {
+  transform: scale(1.1) rotate(-6deg);
+}
+.auth-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #4338ca;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -1px;
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: var(--text-secondary);
+    transform: translateY(-1px);
+}
+@media (max-width: 800px) {
+  .auth-card { max-width: 98vw; padding: 1em 0.5em; }
+}
+
+/* Generated Plan Section styles from index.html */
+.generated-plan {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-md);
+    margin-top: 2rem; /* Adjust margin as needed */
+}
+
+.plan-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.plan-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.plan-content {
+    padding: 2rem;
+    max-height: 60vh; /* Keep existing max-height for scroll */
+    overflow-y: auto;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.plan-content h3 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+}
+
+.plan-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.plan-content ul,
+.plan-content ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.plan-content li {
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+/* Plan Actions styles from index.html */
+.plan-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--background-light);
+    border-radius: 0 0 1rem 1rem;
+}
+</style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Helper function to get CSRF cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Modal functions (copied from index.html)
+    function openTaskModal() {
+        document.getElementById('taskModal').style.display = 'flex';
+        document.getElementById('taskForm').reset();
+    }
+    function closeTaskModal() {
+        document.getElementById('taskModal').style.display = 'none';
+    }
+
+    // Handle task form submission (copied from index.html)
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const dueDateInput = document.getElementById('taskDueDate');
+        const dueDateValue = dueDateInput.value;
+
+        if (dueDateValue) {
+            const selectedDate = new Date(dueDateValue);
+            const today = new Date();
+            // Set time to 00:00:00 for comparison to compare only dates
+            selectedDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                alert('Due date cannot be in the past. Please select a future date.');
+                return; // Prevent form submission
+            }
+        }
+
+        const data = {
+            title: document.getElementById('taskTitle').value,
+            description: document.getElementById('taskDescription').value,
+            priority: document.getElementById('taskPriority').value,
+            status: document.getElementById('taskStatus').value,
+            due_date: dueDateValue // Use the validated date value
+        };
+        fetch('{% url "study_plan:create_task" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(task => {
+            closeTaskModal();
+            // Optionally, show a success message or redirect
+            alert('Task created successfully!');
+            // location.reload(); // You might not want to reload here depending on desired flow
+        })
+        .catch(error => {
+            alert('Error creating task: ' + error);
+        });
+    });
+
+    // PDF Download functionality (adapted for plan_detail.html)
+    document.querySelector('.download-pdf').addEventListener('click', function() {
+        const planContent = document.querySelector('.plan-content').innerHTML; // Use innerHTML to get formatted HTML
+        if (!planContent.trim()) {
+            alert('No study plan content to download');
+            return;
+        }
+
+        // Show loading state
+        const originalText = this.innerHTML;
+        this.disabled = true;
+        this.innerHTML = '<span class="material-icons-round">hourglass_empty</span> Downloading...';
+
+        fetch('{% url "study_plan:download_study_plan_pdf" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                plan: planContent
+            })
+        })
+        .then(response => {
+             if (!response.ok) {
+                return response.text().then(text => {
+                    console.error('Error response:', text);
+                    try {
+                        const data = JSON.parse(text);
+                        throw new Error(data.error || 'Error downloading PDF');
+                    } catch (e) {
+                        throw new Error('Error downloading PDF: ' + text);
+                    }
+                });
+            }
+             const contentType = response.headers.get('content-type');
+             if (contentType && contentType.includes('application/pdf')) {
+                 return response.blob();
+             } else {
+                 throw new Error('Received invalid content type: ' + contentType);
+             }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'study_plan.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        })
+        .catch(error => {
+            console.error('Download error:', error);
+            alert('Error downloading PDF: ' + error.message);
+        })
+        .finally(() => {
+            this.disabled = false;
+            this.innerHTML = originalText;
+        });
+    });
+
+    // Create Tasks button functionality (adapted for plan_detail.html)
+    document.querySelector('.create-tasks').addEventListener('click', function() {
+        const planContent = document.querySelector('.plan-content').innerText; // Use innerText for description
+        const subject = "{{ plan.subject }}"; // Get subject from Django template variable
+
+        // Open the task modal
+        openTaskModal();
+
+        // Populate modal fields
+        document.getElementById('taskTitle').value = `Study Plan: ${subject}`; // Use subject as title
+        document.getElementById('taskDescription').value = planContent.trim(); // Populate description with plan content
+
+        // User can now set priority and due date in the modal
+    });
+
+</script>
+{% endblock %} 

@@ -43,3 +43,16 @@ class StudyGoal(models.Model):
     
     def __str__(self):
         return self.title
+
+class StudyPlan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=200)
+    days = models.PositiveIntegerField()
+    hours = models.FloatField()
+    level = models.CharField(max_length=20)
+    notes = models.TextField(blank=True)
+    plan_text = models.TextField()  # Store the generated plan
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.subject} ({self.level})"

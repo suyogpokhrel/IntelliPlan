@@ -1,0 +1,18 @@
+<!-- Study Plan Card -->
+<div class="card study-plan-card">
+    <div class="card-header">
+        <span class="material-icons-round">menu_book</span>
+        <h2>My Study Plan</h2>
+    </div>
+    <div class="card-content">
+        {% if total_pending_tasks_count is not None %}
+            <p>You have {{ total_pending_tasks_count }} pending tasks in your study plan.</p>
+        {% else %}
+            <p>No pending tasks. Add some tasks to your study plan!</p>
+        {% endif %}
+        <a href="{% url 'study_plan:study_plan' %}" class="btn-primary">
+            Go to Study Plan
+            <span class="material-icons-round">arrow_forward</span>
+        </a>
+    </div>
+</div> 

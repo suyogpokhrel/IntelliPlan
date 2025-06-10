@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +28,9 @@ urlpatterns = [
     path('dashboard/', include('apps.dashboard.urls', namespace='dashboard')),
     path('study-plan/', include('apps.study_plan.urls', namespace='study_plan')),
     path('intellichat/', include('apps.intellichat.urls', namespace='intellichat')),
+    path('about/', include('aboutus.urls', namespace='aboutus')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

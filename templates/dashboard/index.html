@@ -17,11 +17,17 @@
                 <h2>My Study Plan</h2>
             </div>
             <div class="card-content">
-                {% if upcoming_tasks %}
-                    <p>You have {{ upcoming_tasks.count }} pending tasks in your study plan.</p>
+                <p>Generate personalized study plans:</p>
+                <div class="quick-prompts">
+                    <button class="prompt">Enter your subject.</button>
+                    <button class="prompt">Specify duration (days and hours).</button>
+                    <button class="prompt">Select experience level.</button>
+                </div>
+                <!-- {% if total_pending_tasks_count is not None %}
+                    <p>You have {{ total_pending_tasks_count }} pending tasks in your study plan.</p>
                 {% else %}
                     <p>No pending tasks. Add some tasks to your study plan!</p>
-                {% endif %}
+                {% endif %} -->
                 <a href="{% url 'study_plan:study_plan' %}" class="btn-primary">
                     Go to Study Plan
                     <span class="material-icons-round">arrow_forward</span>
@@ -38,9 +44,9 @@
             <div class="card-content">
                 <p>Need help with your studies? Ask IntelliChat:</p>
                 <div class="quick-prompts">
-                    <button class="prompt">"How do I solve quadratic equations?"</button>
-                    <button class="prompt">"Explain the water cycle"</button>
-                    <button class="prompt">"Help me create a study schedule"</button>
+                    <button class="prompt">"What is Machine Learning"</button>
+                    <button class="prompt">"OOP in Python"</button>
+                    <button class="prompt">"What is DOM in JavaScript"</button>
                 </div>
                 <a href="{% url 'intellichat:intellichat' %}" class="btn-primary">
                     Go to IntelliChat
@@ -69,10 +75,10 @@
                         <span class="stat-label">Completion Rate</span>
                         <span class="stat-value">{{ completion_rate }}%</span>
                     </div>
-                    <div class="stat-item">
+                    <!-- <div class="stat-item">
                         <span class="stat-label">Most Common Subject</span>
                         <span class="stat-value">{{ most_common_subject|default:"None" }}</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
