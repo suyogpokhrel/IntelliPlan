@@ -41,15 +41,6 @@ def dashboard(request):
     if total_tasks_count > 0:
         completion_rate = round((completed_tasks_count / total_tasks_count) * 100)
     
-    # Get most common subject (if you have a subject field in your tasks)
-    most_common_subject = None
-    if hasattr(StudyTask, 'subject'):
-        most_common_subject = weekly_tasks.values('subject').annotate(
-            count=Count('subject')
-        ).order_by('-count').first()
-        if most_common_subject:
-            most_common_subject = most_common_subject['subject']
-    
     context = {
         'recent_tasks': recent_tasks,
         'upcoming_tasks': upcoming_tasks,
@@ -59,7 +50,6 @@ def dashboard(request):
         'total_tasks_count': total_tasks_count,
         'high_priority_count': high_priority_count,
         'completion_rate': completion_rate,
-        'most_common_subject': most_common_subject,
         'now': timezone.now(),
     }
     
@@ -75,7 +65,7 @@ def dashboard(request):
             # Render only the weekly progress card
             return render(request, 'dashboard/_progress_card.html', context)
         else:
-            # Default AJAX response (can be customized)
+            # Default AJAX response
             return JsonResponse({'status': 'success', 'message': 'AJAX request received'})
     else:
         # If it's a regular request, render the full page

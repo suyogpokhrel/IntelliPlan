@@ -45,7 +45,7 @@ def chat_message(request):
         # Get response using Gemini model
         assistant_message = get_chat_response(user_message)
         
-        # Save assistant message
+        # Save AI message
         ChatMessage.objects.create(
             conversation=conversation,
             content=assistant_message,

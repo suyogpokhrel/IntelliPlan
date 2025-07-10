@@ -941,43 +941,9 @@
             })
             .then(response => response.text())
             .then(html => {
-                // Update the study plan card section on the dashboard page
-                // This assumes you are currently on the study plan page and want to update
-                // the dashboard card which is likely on a different page.
-                // A better approach might be to have a small indicator on the dashboard
-                // that updates, or refresh the dashboard when the user navigates to it.
-                // However, if the goal is to update a dashboard visible on the *same* page
-                // (e.g., embedded), the following logic would work.
-                // Assuming the dashboard is NOT on the same page, this function should ideally
-                // not be called from here, or it should trigger a less direct update.
-                // Given the user's request, we will implement the direct update assuming
-                // the dashboard card element exists on the current page (though this is unlikely).
-                // A more robust solution would involve websockets or a framework-specific method
-                // for cross-page component updates.
-
-                // Let's refine the goal: The user is likely on the study plan page.
-                // The dashboard is a separate page. We cannot directly update the dashboard page
-                // from the study plan page using simple AJAX and DOM manipulation like this.
-                // The previous approach of `location.reload()` was actually the simplest way
-                // to ensure the dashboard is updated when the user navigates back to it.
-
-                // Reverting to page reload for simplicity and correctness given the likely
-                // architecture (separate pages).
                 location.reload();
 
-                /*
-                // The following code is only useful if the dashboard and study plan
-                // sections were on the same page, or if there was a mechanism
-                // to update components across different pages.
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newStudyPlanCard = doc.querySelector('.study-plan-card');
-                const currentStudyPlanCard = document.querySelector('.study-plan-card'); // This selector needs to find the card on the *current* page
-
-                if (newStudyPlanCard && currentStudyPlanCard) {
-                    currentStudyPlanCard.innerHTML = newStudyPlanCard.innerHTML;
-                }
-                */
+            
             })
             .catch(error => {
                 console.error('Error refreshing dashboard study plan card:', error);
