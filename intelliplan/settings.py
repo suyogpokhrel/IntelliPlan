@@ -180,3 +180,5 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Google API Key for Gemini models
 GOOGLE_API_KEY = config('GOOGLE_API_KEY', default=None)
+
+CSRF_TRUSTED_ORIGINS = ['https://intelliplan1.onrender.com']
