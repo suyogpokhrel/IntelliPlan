@@ -27,8 +27,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-temporary-key-for-dev
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
-ALLOWED_HOSTS = ['https://intelliplan1.onrender.com/']
+ALLOWED_HOSTS = ['intelliplan1.onrender.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
